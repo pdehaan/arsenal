@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>trigger.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="arsenal.html">
+                arsenal.js
+              </a>
+            
+              
+              <a class="source" href="binding.html">
+                binding.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="functional.html">
+                functional.js
+              </a>
+            
+              
+              <a class="source" href="grid.html">
+                grid.js
+              </a>
+            
+              
+              <a class="source" href="sequence.html">
+                sequence.js
+              </a>
+            
+              
+              <a class="source" href="throttle.html">
+                throttle.js
+              </a>
+            
+              
+              <a class="source" href="trigger.html">
+                trigger.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>trigger.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h3 id="trigger-mechanism">Trigger Mechanism</h3>
+<p>Stablity: <strong>STABLE</strong></p>
+<p>Invokes a specified function when all the given conditions were satisfied.</p>
+<p>The conditions will be checked through everytime the context changes.
+(includes adding, updating, removing)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Arsenal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>Constructor</strong></p>
+<p>  <code>var trigger = new Arsenal.Trigger()</code></p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Trigger</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-comment">/* Context for conditions */</span>
+        <span class="hljs-keyword">this</span>._context = {};
+        <span class="hljs-comment">/* Trigger conditions (functions) */</span>
+        <span class="hljs-keyword">this</span>._conditions = [];
+        <span class="hljs-comment">/* The function to be trigged */</span>
+        <span class="hljs-keyword">this</span>._callback = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>};
+        <span class="hljs-comment">/* Context for the callback function */</span>
+        <span class="hljs-keyword">this</span>._callbackContext = {};
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <ul>
+<li><strong>trigger.setCallback(callback, [context])</strong></li>
+<li><p><strong>trigger.hook(callback, [context])</strong></p>
+<p>  Set the callback function to be triggered</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>callback</code> <em>function</em> The callback function to be triggered</p>
+</li>
+<li><p><code>context</code> <em>object</em> Optional, The context the callback to be called in</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setCallback</span><span class="hljs-params">(callback, context)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (Arsenal.isFunction(callback)) {
+            <span class="hljs-keyword">this</span>._callback = callback;
+        }
+
+        <span class="hljs-keyword">if</span> (Arsenal.isObject(context)) {
+            <span class="hljs-keyword">this</span>._callbackContext = context;
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <ul>
+<li><strong>trigger.addCondition(condition)</strong></li>
+<li><p><strong>trigger.watch(condition)</strong></p>
+<p>  Add a new condition</p>
+<p>  The condition is a function which will be executed in the <em>context</em> environment
+  which preset by the <em>setCallback</em> function</p>
+<p>  NOTICE: this function activates the inspector procedure</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>condition</code> <em>string|function</em> The condition to be evaluated</p>
+<ul>
+<li><p><em>string</em> Name of the context (inspector will check the value by the name)</p>
+</li>
+<li><p><em>function</em> Function to be invoked (inspector will check the return value of the function)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addCondition</span><span class="hljs-params">(condition)</span> {</span>
+
+        <span class="hljs-keyword">var</span> conditions = <span class="hljs-keyword">this</span>._conditions,
+            index = conditions.indexOf(condition);
+
+        <span class="hljs-comment">/* Check for duplication */</span>
+        <span class="hljs-keyword">if</span> (index === -<span class="hljs-number">1</span>) {
+            <span class="hljs-keyword">this</span>._conditions.push(condition);
+        }
+
+        <span class="hljs-keyword">this</span>.inspector();
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <ul>
+<li><strong>trigger.removeCondition(condition)</strong></li>
+<li><p><strong>trigger.neglect(condition)</strong></p>
+<p>  Remove the specified condition</p>
+<p>  NOTICE: this function activates the inspector procedure</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>condition</code> <em>string|function</em> The condition to be evaluated</p>
+<ul>
+<li><p><em>string</em> Name of the context (inspector will check the value by the name)</p>
+</li>
+<li><p><em>function</em> Function to be invoked (inspector will check the return value of the function)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeCondition</span><span class="hljs-params">(condition)</span> {</span>
+
+        <span class="hljs-keyword">var</span> conditions = <span class="hljs-keyword">this</span>._conditions,
+            index = conditions.indexOf(condition);
+
+        <span class="hljs-comment">/* Check for existance */</span>
+        <span class="hljs-keyword">if</span> (index !== -<span class="hljs-number">1</span>) {
+            <span class="hljs-keyword">this</span>._conditions.splice(index, <span class="hljs-number">1</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.inspector();
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <ul>
+<li><strong>trigger.getContext(name)</strong></li>
+<li><p><strong>trigger.get(name)</strong></p>
+<p>  Get the condition context</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Name of the variable in the condition context</p>
+<p>Returns:</p>
+</li>
+<li><p><em>ANY</em> Value of the context variable</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getContext</span><span class="hljs-params">(name)</span> {</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._context[name];
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <ul>
+<li><strong>trigger.setContext(name)</strong></li>
+<li><p><strong>trigger.set(name)</strong></p>
+<p>  Change the condition context</p>
+<p>  NOTICE: this function activates the inspector procedure</p>
+<p>  Parameters:</p>
+<ul>
+<li><code>name</code> <em>string</em> Name of the variable in the condition context</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setContext</span><span class="hljs-params">(name, value)</span> {</span>
+
+        <span class="hljs-keyword">this</span>._context[name] = value;
+        <span class="hljs-keyword">this</span>.inspector();
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <ul>
+<li><strong>trigger.unsetContext(name)</strong></li>
+<li><p><strong>trigger.unset(name)</strong></p>
+<p>  Unset condition context, one or all</p>
+<p>  NOTICE: this function activates the inspector procedure</p>
+<p>  Parameters:</p>
+<ul>
+<li><code>name</code> <em>string</em> Name of the variable in the condition context</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unsetContext</span><span class="hljs-params">(name)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (Arsenal.isUndefined(name)) {
+            <span class="hljs-keyword">this</span>._context = {};
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._context[name];
+        }
+
+        <span class="hljs-keyword">this</span>.inspector();
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>trigger.inspector()</strong></p>
+<p>  Inspection procedure</p>
+<p>  This will check all the conditions for trigging the callback</p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">inspector</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-keyword">var</span> conditions = <span class="hljs-keyword">this</span>._conditions,
+            semaphore = <span class="hljs-literal">true</span>;
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; conditions.length; i++) {
+            <span class="hljs-keyword">if</span> (Arsenal.isString(conditions[i])) {
+                semaphore = semaphore &amp;&amp; !! <span class="hljs-keyword">this</span>._context[conditions[i]];
+
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isFunction(conditions[i])) {
+                semaphore = semaphore &amp;&amp; !! conditions[i].call(<span class="hljs-keyword">this</span>._context);
+            }
+
+            <span class="hljs-keyword">if</span> (! semaphore) { <span class="hljs-keyword">return</span>; }
+        }
+
+        <span class="hljs-keyword">if</span> (semaphore) {
+            <span class="hljs-keyword">this</span>._callback.call(<span class="hljs-keyword">this</span>._callbackContext);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p><strong>Primary functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Trigger.prototype.setCallback = setCallback;
+    Trigger.prototype.addCondition = addCondition;
+    Trigger.prototype.removeCondition = removeCondition;
+    Trigger.prototype.getContext = getContext;
+    Trigger.prototype.setContext = setContext;
+    Trigger.prototype.unsetContext = unsetContext;
+    Trigger.prototype.inspector = inspector;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p><strong>Accessibility functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Trigger.prototype.hook = setCallback;
+    Trigger.prototype.watch = addCondition;
+    Trigger.prototype.neglect = removeCondition;
+    Trigger.prototype.get = getContext;
+    Trigger.prototype.set = setContext;
+    Trigger.prototype.unset = unsetContext;
+
+    <span class="hljs-comment">/* Export the Trigger mechanism */</span>
+    Arsenal.Trigger = Trigger;
+    <span class="hljs-keyword">return</span> Trigger;
+
+})(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

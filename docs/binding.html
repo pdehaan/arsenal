@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>binding.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="arsenal.html">
+                arsenal.js
+              </a>
+            
+              
+              <a class="source" href="binding.html">
+                binding.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="functional.html">
+                functional.js
+              </a>
+            
+              
+              <a class="source" href="grid.html">
+                grid.js
+              </a>
+            
+              
+              <a class="source" href="sequence.html">
+                sequence.js
+              </a>
+            
+              
+              <a class="source" href="throttle.html">
+                throttle.js
+              </a>
+            
+              
+              <a class="source" href="trigger.html">
+                trigger.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>binding.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h3 id="binding-mechanism">Binding Mechanism</h3>
+<p>Stablity: <strong>STABLE</strong></p>
+<p>Bind handlers or properties to a specific data-node.</p>
+<p>Data changes will feed back to binded handlers (be invoked with) or properties.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Arsenal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>Constructor</strong></p>
+<p>  <code>var binding = new Arsenal.Binding()</code></p>
+<p>  <code>var binding = new Arsenal.Binding(data)</code></p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Binding</span><span class="hljs-params">(data)</span> {</span>
+
+        <span class="hljs-comment">/* Source data */</span>
+        <span class="hljs-keyword">this</span>._data = {};
+        <span class="hljs-comment">/* Bindings map */</span>
+        <span class="hljs-keyword">this</span>._bindings = {};
+
+        <span class="hljs-comment">/* Initialize the whole source data */</span>
+        <span class="hljs-keyword">if</span> (data) {
+            <span class="hljs-keyword">this</span>.updateSource(<span class="hljs-literal">null</span>, data);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.bindTarget(path, handler)</strong></li>
+<li><p><strong>binding.bind(path, handler)</strong></p>
+<p>  Bind a handler or property to the specific data-node</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>path</code> <em>string</em> Path to the data-node to be binded to</p>
+</li>
+<li><p><code>handler</code> <em>ANY</em> Can be one of the following values:</p>
+<ul>
+<li><p><em>function</em> Handler function, as:</p>
+<p>  <code>function (value, key, handler, former)</code></p>
+<ul>
+<li><p><code>value</code> <em>ANY</em> The updated new data of the node</p>
+</li>
+<li><p><code>key</code> <em>number|string</em> Key name in the parent node</p>
+</li>
+<li><p><code>handler</code> <em>ANY</em> The DSN handler structure (see function <code>updateSource</code>)</p>
+</li>
+<li><p><code>former</code> <em>ANY</em> The former old data of the node</p>
+</li>
+<li><p><code>path</code> <em>string</em> Path to the node</p>
+</li>
+</ul>
+</li>
+<li><p><em>Array</em> An array consist of [ object, key ]</p>
+</li>
+<li><p><em>string</em> Path to the data-node</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bindTarget</span><span class="hljs-params">(path, handler)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (! path) { path = <span class="hljs-string">''</span>; }
+
+        <span class="hljs-keyword">if</span> (! Arsenal.isArray(<span class="hljs-keyword">this</span>._bindings[path])) {
+            <span class="hljs-keyword">this</span>._bindings[path] = [ handler ];
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>._bindings[path].push(handler);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.unbindTarget(path, handler)</strong></li>
+<li><p><strong>binding.unbind(path, handler)</strong></p>
+<p>  Unbind a handler or property from the specific data-node</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>path</code> <em>string</em> Path to the data-node to be unbinded from</p>
+</li>
+<li><p><code>handler</code> <em>ANY</em> Can be one of the following values:</p>
+<ul>
+<li><p><em>function</em> Handler function, must be exactly the one binded</p>
+</li>
+<li><p><em>Array</em> An array consist of [ object, key ]</p>
+</li>
+<li><p><em>string</em> Path to the data-node</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unbindTarget</span><span class="hljs-params">(path, handler)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (! path) { path = <span class="hljs-string">''</span>; }
+
+        <span class="hljs-keyword">if</span> (Arsenal.isArray(<span class="hljs-keyword">this</span>._bindings[path])) {
+            <span class="hljs-keyword">var</span> index = <span class="hljs-keyword">this</span>._bindings[path].indexOf(handler);
+
+            <span class="hljs-keyword">if</span> (index !== -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">this</span>._bindings[path].splice(index, <span class="hljs-number">1</span>);
+            }
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.clearBindings(path)</strong></li>
+<li><p><strong>binding.clear(path)</strong></p>
+<p>  Clear the binded handlers or properties to the specific data-node</p>
+<p>  Parameters:</p>
+<ul>
+<li><code>path</code> <em>string</em> Optional, path to the data-node, omit to clear all the bindings</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clearBindings</span><span class="hljs-params">(path)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (! path) { path = <span class="hljs-string">''</span>; }
+
+        <span class="hljs-keyword">if</span> (Arsenal.isDefined(path)) {
+            <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._bindings[path];
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>._bindings) {
+                <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._bindings[i];
+            }
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.getData(path, value)</strong></li>
+<li><p><strong>binding.get(path, value)</strong></p>
+<p>  Get node value by path</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>path</code> <em>string</em> Path to the data-node</p>
+<p>Returns:</p>
+</li>
+<li><p><em>ANY</em> Node value</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getData</span><span class="hljs-params">(path)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (path &amp;&amp; Arsenal.isString(path)) {
+            <span class="hljs-keyword">var</span> re = <span class="hljs-regexp">/[^\.\[\]]+/g</span>,
+                matches, index, key, cursor, peek;
+
+            <span class="hljs-keyword">while</span> ((matches = re.exec(path)) !== <span class="hljs-literal">null</span>) {
+                index = matches.index;
+                key = matches[<span class="hljs-number">0</span>];
+                cursor = peek || <span class="hljs-keyword">this</span>._data;
+                peek = cursor[key];
+
+                <span class="hljs-keyword">if</span> (Arsenal.isUndefined(peek)) {
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+                }
+            }
+
+            <span class="hljs-comment">/* Return the node data */</span>
+            <span class="hljs-keyword">return</span> peek;
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._data;
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.updateSource(path, value, func)</strong></li>
+<li><p><strong>binding.update(path, value, func)</strong></p>
+<p>  Update the specific data-node with the value</p>
+<p>  The binded handler will be called with the data-node as the first parameter</p>
+<p>  The binded properties will be set with the data-node</p>
+<p>  Parent paths of the binded node, act as bubble-like event,
+  which processes from current node to the root level,
+  passing node data with the corresponding path as the parameter</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>path</code> <em>string</em> Path to the data-node to be updated</p>
+</li>
+<li><p><code>value</code> <em>ANY</em> The value for the data-node</p>
+</li>
+<li><p><code>modifier</code> <em>string|function|Array</em> Optional, a custom modifier for updating the specific data-node with the value,
+different type of modifier have individual function:</p>
+<ul>
+<li><p><em>number</em> The indicator part of the Data-Synchronize-Notation (see after),
+using the value from arguments as the value part, for synchronizing array data-node,
+(undefined value for removing the element)</p>
+</li>
+<li><p><em>string</em> The indicator part of the Data-Synchronize-Notation (see after),
+using the value from arguments as the value part, for synchronizing object data-node,
+(undefined value for removing the element)</p>
+</li>
+<li><p><em>Array</em> An array represent as a Data-Synchronize-Notation (see after),
+using the second element in the array as the value part, and ignoring the former one from arguments,
+(undefined value for setting undefined to the element)</p>
+</li>
+<li><p><em>function</em> Custom modifier, the modifier recevies the data-node and the value as its paramters,
+return value of the modifier function will replace the data-node, as:</p>
+<p>  node = modifier(node, value);</p>
+<p>Notice: paths use wildcard leaves do not receive elemental events (only the parent node does).</p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><em>ANY</em> Old value of the data-node before updating</li>
+</ul>
+<p>About Data-Synchronize-Notation:</p>
+<p>The Data-Synchronize-Notation (abbrev as DSN) is a conventional notation for representing partially data modification,
+usually use for synchronizing and updating data between distributed/cluster data repositories.</p>
+<p>In Javascript, the DSN is an array consist of one or two elements, for modifying objects and arrays.
+For illustration, we assume that variable <code>source</code> is going to be updated with variable <code>value</code>.</p>
+<p>The first element in the DSN array is the <em>indicator</em>.
+The optional second element is the <em>value</em> to be updated with.
+As:</p>
+<p>  [ indicator, value ]</p>
+</li>
+<li><p>If the <code>source</code> is an <em>Array</em>, the <code>indicator</code> must be a <em>number</em>:</p>
+<ul>
+<li><p>When the <code>value</code> is present, and indicator &gt;= 0, update item as: <code>source[indicator] = value;</code></p>
+</li>
+<li><p>When the <code>value</code> is present, and indicator &lt; 0, insert item as: <code>source.splice(- indicator - 1, 0, value);</code></p>
+</li>
+<li><p>When the <code>value</code> is present, and indicator is null (must equals to <em>null</em>), append item as: <code>source.push(value);</code></p>
+</li>
+<li><p>When the <code>value</code> is not present (only <code>indicator</code> in DSN array), remove item as: <code>source.splice(indicator, 1);</code></p>
+</li>
+</ul>
+</li>
+<li><p>If the <code>source</code> is an <em>Object</em>, the <code>indicator</code> must be a <em>string</em>:</p>
+<ul>
+<li><p>When the <code>value</code> is present, set item as: <code>source[indicator] = value;</code></p>
+</li>
+<li><p>When the <code>value</code> is not present (only <code>indicator</code> in DSN array), unset item as: <code>delete source[indicator];</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateSource</span><span class="hljs-params">(path, value, modifier)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (path &amp;&amp; Arsenal.isString(path)) {
+            <span class="hljs-keyword">var</span> re = <span class="hljs-regexp">/[^\.\[\]]+/g</span>,
+                hashSplit = <span class="hljs-string">'.'</span>,
+                arrayFront = <span class="hljs-string">'['</span>,
+                arrayBack = <span class="hljs-string">']'</span>,
+                wildcard = <span class="hljs-string">'*'</span>,
+                matches = <span class="hljs-literal">null</span>,
+                index, key, prev, cursor, peek, former,
+                nodeTag, nodeBack,
+                bubbles = [], leaves = [], branches = [],
+                targets, i, j;
+
+            <span class="hljs-comment">/* Add root path to the top of bubbles */</span>
+            bubbles.unshift([ <span class="hljs-string">''</span>, <span class="hljs-keyword">this</span>._data, <span class="hljs-string">''</span> ]);
+
+            <span class="hljs-keyword">while</span> ((matches = re.exec(path)) !== <span class="hljs-literal">null</span>) {
+                index = matches.index;
+                prev = key;
+                key = matches[<span class="hljs-number">0</span>];
+                cursor = peek || <span class="hljs-keyword">this</span>._data;
+
+                <span class="hljs-keyword">if</span> (key === wildcard) {
+                    <span class="hljs-keyword">if</span> (Arsenal.isArray(cursor)) {
+                        <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; cursor.length; i++) {
+                            <span class="hljs-keyword">this</span>.updateSource(path.substr(<span class="hljs-number">0</span>, index) + <span class="hljs-built_in">String</span>(i) + path.substr(index + key.length), value, modifier);
+                        }
+
+                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isHash(cursor)) {
+                        <span class="hljs-keyword">for</span> (i <span class="hljs-keyword">in</span> cursor) {
+                            <span class="hljs-keyword">this</span>.updateSource(path.substr(<span class="hljs-number">0</span>, index) + <span class="hljs-built_in">String</span>(i) + path.substr(index + key.length), value, modifier);
+                        }
+                    }
+
+                    <span class="hljs-keyword">return</span> cursor[key];
+                }
+
+                peek = cursor[key];
+                former = cursor[key];
+
+                <span class="hljs-keyword">if</span> (! Arsenal.isHash(peek) &amp;&amp; ! Arsenal.isArray(peek)) {
+                    <span class="hljs-keyword">if</span> (index &lt; path.length - <span class="hljs-number">1</span> &amp;&amp;
+                        path.charAt(index + key.length) === arrayFront) {
+
+                        cursor[key] = [];
+
+                    } <span class="hljs-keyword">else</span> {
+                        cursor[key] = {};
+                    }
+
+                    peek = cursor[key];
+                }
+
+                leaves = [];
+
+                <span class="hljs-keyword">if</span> (Arsenal.isArray(cursor)) {
+                    <span class="hljs-keyword">var</span> nodeTag = arrayFront + key + arrayBack,
+                        nodeBack = arrayBack;
+
+                    key = +key;
+
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isHash(cursor)) {
+                    <span class="hljs-keyword">var</span> nodeTag = hashSplit + key,
+                        nodeBack = <span class="hljs-string">''</span>;
+                }
+
+                <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; branches.length; i++) {
+                    branches[i][<span class="hljs-number">0</span>] += nodeTag;
+                    bubbles.push([
+                        branches[i][<span class="hljs-number">0</span>],
+                        peek,
+                        branches[i][<span class="hljs-number">1</span>]
+                    ]);
+                    leaves.push(bubbles.length - <span class="hljs-number">1</span>);
+                }
+
+                branches.push([
+                    path.substr(<span class="hljs-number">0</span>, index) + wildcard + nodeBack,
+                    key
+                ]);
+
+                bubbles.push([
+                    path.substr(<span class="hljs-number">0</span>, index) + wildcard + nodeBack,
+                    peek,
+                    key
+                ]);
+                bubbles.push([
+                    path.substr(<span class="hljs-number">0</span>, index) + key + nodeBack,
+                    peek,
+                    key
+                ]);
+
+                leaves.push(bubbles.length - <span class="hljs-number">2</span>);
+                leaves.push(bubbles.length - <span class="hljs-number">1</span>);
+            }
+
+            <span class="hljs-comment">/* Update data-node with DSN parameters */</span>
+            <span class="hljs-keyword">if</span> (Arsenal.isNumber(modifier)) {
+                <span class="hljs-keyword">if</span> (Arsenal.isDefined(value)) {
+                    <span class="hljs-keyword">if</span> (modifier &gt;= <span class="hljs-number">0</span>) {
+                        cursor[key][modifier] = value;
+
+                    } <span class="hljs-keyword">else</span> {
+                        cursor[key].splice(- modifier - <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, value);
+                    }
+
+                } <span class="hljs-keyword">else</span> {
+                    cursor[key].splice(modifier, <span class="hljs-number">1</span>);
+                }
+
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isNull(modifier)) {
+                <span class="hljs-keyword">if</span> (Arsenal.isDefined(value)) {
+                    cursor[key].push(value);
+                }
+
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isString(modifier)) {
+                <span class="hljs-keyword">if</span> (Arsenal.isDefined(value)) {
+                    cursor[key][modifier] = value;
+
+                } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">delete</span> cursor[key][modifier];
+                }
+
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isArray(modifier)) {
+                <span class="hljs-keyword">if</span> (Arsenal.isArray(cursor[key])) {
+                    <span class="hljs-keyword">if</span> (Arsenal.isNumber(modifier[<span class="hljs-number">0</span>])) {
+                        <span class="hljs-keyword">if</span> (modifier.length === <span class="hljs-number">2</span>) {
+                            <span class="hljs-keyword">if</span> (modifier[<span class="hljs-number">0</span>] &gt;= <span class="hljs-number">0</span>) {
+                                cursor[key][modifier[<span class="hljs-number">0</span>]] = modifier[<span class="hljs-number">1</span>];
+
+                            } <span class="hljs-keyword">else</span> {
+                                cursor[key].splice(- modifier[<span class="hljs-number">0</span>] - <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, modifier[<span class="hljs-number">1</span>]);
+                            }
+
+                        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (modifier.length === <span class="hljs-number">1</span>) {
+                            cursor[key].splice(modifier[<span class="hljs-number">0</span>], <span class="hljs-number">1</span>);
+                        }
+
+                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isNull(modifier[<span class="hljs-number">0</span>])) {
+                        cursor[key].push(modifier[<span class="hljs-number">1</span>]);
+                    }
+
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isObject(cursor[key])) {
+                    <span class="hljs-keyword">if</span> (modifier.length === <span class="hljs-number">2</span>) {
+                        cursor[key][modifier[<span class="hljs-number">0</span>]] = modifier[<span class="hljs-number">1</span>];
+
+                    } <span class="hljs-keyword">else</span> {
+                        <span class="hljs-keyword">delete</span> cursor[key][modifier[<span class="hljs-number">0</span>]];
+                    }
+                }
+
+            <span class="hljs-comment">/* Update data-node with custom modifier */</span>
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isFunction(modifier)) {
+                cursor[key] = modifier(cursor[key], value);
+
+            <span class="hljs-comment">/* Update data-node normally */</span>
+            } <span class="hljs-keyword">else</span> {
+                cursor[key] = value;
+            }
+
+            <span class="hljs-comment">/* Update value of the leaf nodes in the bubbles */</span>
+            <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; leaves.length; i++) {
+                bubbles[leaves[i]][<span class="hljs-number">1</span>] = cursor[key];
+            }
+
+            <span class="hljs-comment">/* Transmit to the binded targets */</span>
+            <span class="hljs-keyword">for</span> (i = bubbles.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+                targets = <span class="hljs-keyword">this</span>._bindings[bubbles[i][<span class="hljs-number">0</span>]];
+
+                <span class="hljs-keyword">if</span> (Arsenal.isArray(targets)) {
+                    <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; targets.length; j++) {
+                        <span class="hljs-keyword">if</span> (Arsenal.isFunction(targets[j])) {
+                            targets[j].call(<span class="hljs-literal">null</span>, bubbles[i][<span class="hljs-number">1</span>], bubbles[i][<span class="hljs-number">2</span>], modifier, former, path);
+
+                        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isArray(targets[j])) {
+                            targets[j][<span class="hljs-number">0</span>][targets[j][<span class="hljs-number">1</span>]] = bubbles[i][<span class="hljs-number">1</span>];
+
+                        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isString(targets[j])) {
+                            <span class="hljs-keyword">this</span>.updateSource(targets[j], bubbles[i][<span class="hljs-number">1</span>]);
+                        }
+                    }
+                }
+            }
+
+            <span class="hljs-keyword">return</span> former;
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">var</span> former = <span class="hljs-keyword">this</span>._data,
+                targets = <span class="hljs-keyword">this</span>._bindings[<span class="hljs-string">''</span>];
+
+            <span class="hljs-keyword">this</span>._data = value;
+
+            <span class="hljs-keyword">if</span> (Arsenal.isArray(targets)) {
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; targets.length; i++) {
+                    <span class="hljs-keyword">if</span> (Arsenal.isFunction(targets[i])) {
+                        targets[i].call(<span class="hljs-literal">null</span>, value, <span class="hljs-string">''</span>, modifier, former, path);
+
+                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isArray(targets[i])) {
+                        targets[i][<span class="hljs-number">0</span>][targets[i][<span class="hljs-number">1</span>]] = value;
+
+                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isString(targets[i])) {
+                        <span class="hljs-keyword">this</span>.updateSource(targets[i], value);
+                    }
+                }
+            }
+
+            <span class="hljs-keyword">return</span> former;
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p><strong>Primary functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Binding.prototype.bindTarget = bindTarget;
+    Binding.prototype.unbindTarget = unbindTarget;
+    Binding.prototype.clearBindings = clearBindings;
+    Binding.prototype.getData = getData;
+    Binding.prototype.updateSource = updateSource;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p><strong>Accessibility functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Binding.prototype.bind = bindTarget;
+    Binding.prototype.unbind = unbindTarget;
+    Binding.prototype.clear = clearBindings;
+    Binding.prototype.get = getData;
+    Binding.prototype.update = updateSource;
+
+    <span class="hljs-comment">/* Export the Binding mechanism */</span>
+    Arsenal.Binding = Binding;
+    <span class="hljs-keyword">return</span> Binding;
+
+})(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

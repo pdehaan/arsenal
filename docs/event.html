@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>event.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="arsenal.html">
+                arsenal.js
+              </a>
+            
+              
+              <a class="source" href="binding.html">
+                binding.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="functional.html">
+                functional.js
+              </a>
+            
+              
+              <a class="source" href="grid.html">
+                grid.js
+              </a>
+            
+              
+              <a class="source" href="sequence.html">
+                sequence.js
+              </a>
+            
+              
+              <a class="source" href="throttle.html">
+                throttle.js
+              </a>
+            
+              
+              <a class="source" href="trigger.html">
+                trigger.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>event.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h3 id="event-mechanism">Event Mechanism</h3>
+<p>Stablity: <strong>STABLE</strong></p>
+<p>Implementation of the well-known <em>Event</em> mechanism.</p>
+<p>Compatible to the events.EventEmitter in node.js.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Arsenal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>Constructor</strong></p>
+<p>  <code>var event = new Arsenal.Event()</code></p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Event</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-comment">/* Listeners map */</span>
+        <span class="hljs-keyword">this</span>._listeners = {};
+        <span class="hljs-comment">/* Listener contexts */</span>
+        <span class="hljs-keyword">this</span>._contexts = {};
+        <span class="hljs-comment">/* One-off listeners' name list */</span>
+        <span class="hljs-keyword">this</span>._removals = [];
+        <span class="hljs-comment">/* Max listeners per each event */</span>
+        <span class="hljs-keyword">this</span>._max = <span class="hljs-number">10</span>;
+        <span class="hljs-comment">/* Continue to next event listener (default) */</span>
+        <span class="hljs-keyword">this</span>.DISPATCH_NEXT = <span class="hljs-literal">true</span>;
+        <span class="hljs-comment">/* Stop event bubbling */</span>
+        <span class="hljs-keyword">this</span>.DISPATCH_STOP = <span class="hljs-literal">false</span>;
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.getListeners(name)</strong></li>
+<li><p><strong>event.listeners(name)</strong></p>
+<p>  Get all listerners binding on the specific event</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Name of the event</p>
+<p>Returns:</p>
+</li>
+<li><p><em>Array</em> List of the event listeners</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getListeners</span><span class="hljs-params">(name)</span> {</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._listeners[name];
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.addListener(name, listener, [context])</strong></li>
+<li><p><strong>event.on(name, listener, [context])</strong></p>
+<p>  Add a listener on the specific event</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Event name to listen to</p>
+</li>
+<li><p><code>listener</code> <em>function</em> Listener function</p>
+</li>
+<li><p><code>context</code> <em>object</em> Optional, the context object of the listener function to be called in</p>
+<p>Returns:</p>
+</li>
+<li><p><em>boolean</em> Whether the listener count have reach the cap</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addListener</span><span class="hljs-params">(name, listener, context)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (! Arsenal.isFunction(listener)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-keyword">var</span> listeners = <span class="hljs-keyword">this</span>._listeners[name];
+
+        <span class="hljs-keyword">if</span> (listeners &amp;&amp;
+            <span class="hljs-keyword">this</span>._max &gt; <span class="hljs-number">0</span> &amp;&amp;
+            listeners.length &gt;= <span class="hljs-keyword">this</span>._max) {
+
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-keyword">if</span> (Arsenal.isArray(listeners)) {
+            <span class="hljs-comment">/* Check for duplication */</span>
+            <span class="hljs-keyword">var</span> index = listeners.indexOf(listener);
+
+            <span class="hljs-keyword">if</span> (index === -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">this</span>._listeners[name].push(listener);
+                <span class="hljs-keyword">this</span>._contexts[name].push(context);
+            }
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>._listeners[name] = [ listener ];
+            <span class="hljs-keyword">this</span>._contexts[name] = [ context ];
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.addListenerOnce(name, listener, [context])</strong></li>
+<li><p><strong>event.once(name, listener, [context])</strong></p>
+<p>  Add a listener on the specific event for only once</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Event name to listen to</p>
+</li>
+<li><p><code>listener</code> <em>function</em> Listener function</p>
+</li>
+<li><p><code>context</code> <em>object</em> Optional, the context object of the listener function to be called in</p>
+<p>Returns:</p>
+</li>
+<li><p><em>boolean</em> Whether the listener count have reach the cap</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addListenerOnce</span><span class="hljs-params">(name, listener, context)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.addListener(name, listener, context)) {
+            <span class="hljs-keyword">this</span>._removals.push(listener);
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.removeListener(name, [listener])</strong></li>
+<li><p><strong>event.off(name, [listener])</strong></p>
+<p>  Remove one/all listener off the specific event</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Event name to listen to</p>
+</li>
+<li><p><code>listener</code> <em>function</em> Listener function, omit to remove all event listeners</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeListener</span><span class="hljs-params">(name, listener)</span> {</span>
+
+        <span class="hljs-keyword">var</span> listeners = <span class="hljs-keyword">this</span>._listeners[name],
+            index;
+
+        <span class="hljs-comment">/* Remove multi/all listeners */</span>
+        <span class="hljs-keyword">if</span> (Arsenal.isUndefined(listener)) {
+            <span class="hljs-keyword">if</span> (name) {
+                <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._listeners[name];
+                <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._contexts[name];
+
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; listeners.length; i++) {
+                    index = <span class="hljs-keyword">this</span>._removals.indexOf(listeners[i]);
+
+                    <span class="hljs-keyword">if</span> (index !== -<span class="hljs-number">1</span>) {
+                        <span class="hljs-keyword">this</span>._removals.splice(index, <span class="hljs-number">1</span>);
+                    }
+                }
+
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">this</span>._listeners = {};
+                <span class="hljs-keyword">this</span>._contexts = {};
+                <span class="hljs-keyword">this</span>._removals = [];
+            }
+
+        <span class="hljs-comment">/* Remove one listener */</span>
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isArray(listeners)) {
+            <span class="hljs-comment">/* Check for existance */</span>
+            index = listeners.indexOf(listener);
+
+            <span class="hljs-keyword">if</span> (index !== -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">this</span>._listeners[name].splice(index, <span class="hljs-number">1</span>);
+                <span class="hljs-keyword">this</span>._contexts[name].splice(index, <span class="hljs-number">1</span>);
+            }
+
+            index = <span class="hljs-keyword">this</span>._removals.indexOf(listener);
+
+            <span class="hljs-keyword">if</span> (index !== -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">this</span>._removals.splice(index, <span class="hljs-number">1</span>);
+            }
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.dispatchSync(name, [arg1], [arg2], […])</strong></li>
+<li><p><strong>event.dispatch(name, [arg1], [arg2], […])</strong></p>
+<p>  Dispatch event to listeners, synchronously</p>
+<p>  Multi arguments acceptable</p>
+<p>  This function will iterate into all event listeners until one returns false</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Name of the event to dispatch to</p>
+</li>
+<li><p><code>arg1, arg2, ...</code> <em>ANY</em> Optional, arguments pass to the event listeners</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dispatchSync</span><span class="hljs-params">(name)</span> {</span>
+
+        <span class="hljs-keyword">var</span> listeners = <span class="hljs-keyword">this</span>._listeners[name],
+            args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);
+
+        <span class="hljs-keyword">if</span> (Arsenal.isArray(listeners)) {
+            listeners.some(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e, i)</span> {</span>
+                <span class="hljs-keyword">var</span> context = <span class="hljs-keyword">this</span>._contexts[name][i];
+
+                <span class="hljs-keyword">if</span> (e &amp;&amp; <span class="hljs-keyword">this</span>._removals.indexOf(e) !== -<span class="hljs-number">1</span>) {
+                    <span class="hljs-keyword">this</span>.removeListener(name, e);
+                }
+
+                <span class="hljs-keyword">if</span> (e.apply(context, args.slice(<span class="hljs-number">1</span>)) ===
+                    <span class="hljs-keyword">this</span>.DISPATCH_STOP) {
+
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+
+                } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+                }
+            }, <span class="hljs-keyword">this</span>);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.dispatchAsync(name, [arg1], [arg2], […])</strong></li>
+<li><p><strong>event.emit(name, [arg1], [arg2], […])</strong></p>
+<p>  Dispatch event to listeners, synchronously</p>
+<p>  Multi arguments acceptable</p>
+<p>  This function will iterate into all event listeners, without stopping</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>name</code> <em>string</em> Name of the event to dispatch to</p>
+</li>
+<li><p><code>arg1, arg2, ...</code> <em>ANY</em> Optional, arguments pass to the event listeners</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dispatchAsync</span><span class="hljs-params">(name)</span> {</span>
+
+        <span class="hljs-keyword">var</span> listeners = <span class="hljs-keyword">this</span>._listeners[name],
+            args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);
+
+        <span class="hljs-keyword">if</span> (Arsenal.isArray(listeners)) {
+            listeners.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e, i)</span> {</span>
+                <span class="hljs-keyword">var</span> context = <span class="hljs-keyword">this</span>._contexts[name][i];
+
+                Arsenal.async(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+                    e.apply(context, args.slice(<span class="hljs-number">1</span>));
+                });
+            }, <span class="hljs-keyword">this</span>);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <ul>
+<li><strong>event.setMaxListeners(number)</strong></li>
+<li><p><strong>event.limit(number)</strong></p>
+<p>  Set maximum number of listeners per event</p>
+<p>  Set to zero for unlimited</p>
+<p>  Parameters:</p>
+<ul>
+<li><code>number</code> <em>number</em> Max number of listeners per event</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setMaxListeners</span><span class="hljs-params">(number)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (Arsenal.isNumber(number) &amp;&amp; number &gt;= <span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">this</span>._max = number;
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p><strong>Primary functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Event.prototype.getListeners = getListeners;
+    Event.prototype.addListener = addListener;
+    Event.prototype.addListenerOnce = addListenerOnce;
+    Event.prototype.removeListener = removeListener;
+    Event.prototype.removeAllListeners = removeListener;
+    Event.prototype.dispatchSync = dispatchSync;
+    Event.prototype.dispatchAsync = dispatchAsync;
+    Event.prototype.setMaxListeners = setMaxListeners;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p><strong>Accessibility functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Event.prototype.listeners = getListeners;
+    Event.prototype.on = addListener;
+    Event.prototype.once = addListenerOnce;
+    Event.prototype.off = removeListener;
+    Event.prototype.dispatch = dispatchSync;
+    Event.prototype.emit = dispatchSync;
+    Event.prototype.emitAsync = dispatchAsync;
+    Event.prototype.limit = setMaxListeners;
+
+    <span class="hljs-comment">/* Export the Event mechanism */</span>
+    Arsenal.Event = Event;
+    <span class="hljs-keyword">return</span> Event;
+
+})(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

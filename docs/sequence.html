@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>sequence.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="arsenal.html">
+                arsenal.js
+              </a>
+            
+              
+              <a class="source" href="binding.html">
+                binding.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="functional.html">
+                functional.js
+              </a>
+            
+              
+              <a class="source" href="grid.html">
+                grid.js
+              </a>
+            
+              
+              <a class="source" href="sequence.html">
+                sequence.js
+              </a>
+            
+              
+              <a class="source" href="throttle.html">
+                throttle.js
+              </a>
+            
+              
+              <a class="source" href="trigger.html">
+                trigger.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>sequence.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h3 id="sequence-mechanism">Sequence Mechanism</h3>
+<p>Stablity: <strong>UNSTABLE</strong></p>
+<p>Run functions and callbacks in sequence.</p>
+<p>The functions runs in serial order.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Arsenal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>Constructor</strong></p>
+<p>  <code>var sequence = new Arsenal.Sequence()</code></p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Sequence</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-comment">/* Funciton sequence */</span>
+        <span class="hljs-keyword">this</span>._functions = [];
+
+        <span class="hljs-comment">/* Function context */</span>
+        <span class="hljs-keyword">this</span>._context = {
+            push: <span class="hljs-keyword">this</span>.pushFunction.bind(<span class="hljs-keyword">this</span>),
+            pop: <span class="hljs-keyword">this</span>.popFunction.bind(<span class="hljs-keyword">this</span>),
+            shift: <span class="hljs-keyword">this</span>.shiftFunction.bind(<span class="hljs-keyword">this</span>),
+            unshift: <span class="hljs-keyword">this</span>.unshiftFunction.bind(<span class="hljs-keyword">this</span>),
+            count: <span class="hljs-keyword">this</span>.countFunctions.bind(<span class="hljs-keyword">this</span>),
+            next: <span class="hljs-keyword">this</span>.next.bind(<span class="hljs-keyword">this</span>)
+        };
+
+        <span class="hljs-comment">/* Execution index */</span>
+        <span class="hljs-keyword">this</span>._index = <span class="hljs-number">0</span>;
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.pushFunction(func)</strong></li>
+<li><p><strong>binding.push(func)</strong></p>
+<p>  Push one or more functions at the end of the sequence</p>
+<p>  Parameters:</p>
+<ul>
+<li><code>func</code> <em>function|Array</em> A function or an array of functions to be pushed into the sequence</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pushFunction</span><span class="hljs-params">(func)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (Arsenal.isArray(func)) {
+            <span class="hljs-built_in">Array</span>.prototype.push.apply(<span class="hljs-keyword">this</span>._functions, func);
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>._functions.push(func);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.popFunction()</strong></li>
+<li><p><strong>binding.pop()</strong></p>
+<p>  Remove one function from the end of the sequence</p>
+<p>  Returns:</p>
+<ul>
+<li><em>function</em> The function pop from the end of the sequence</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">popFunction</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._functions.pop();
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.shiftFunction()</strong></li>
+<li><p><strong>binding.shift()</strong></p>
+<p>  Remove one function from the beginning of the sequence</p>
+<p>  Returns:</p>
+<ul>
+<li><em>function</em> The function shift from the beginning of the sequence</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">shiftFunction</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._functions.shift();
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.unshiftFunction(func)</strong></li>
+<li><p><strong>binding.unshift(func)</strong></p>
+<p>  Insert one or more functions at the beginning of the sequence</p>
+<p>  Parameters:</p>
+<ul>
+<li><code>func</code> <em>function|Array</em> A function or an array of functions to be inserted into the sequence</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unshiftFunction</span><span class="hljs-params">(func)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (Arsenal.isArray(func)) {
+            <span class="hljs-built_in">Array</span>.prototype.unshift.apply(<span class="hljs-keyword">this</span>._functions, func);
+
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>._functions.unshift(func);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.countFunctions()</strong></li>
+<li><p><strong>binding.count()</strong></p>
+<p>  Return the number of functions in the sequence</p>
+<p>  Returns:</p>
+<ul>
+<li><em>number</em> The number of functions in the sequence</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">countFunctions</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._functions.length;
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <ul>
+<li><strong>binding.setContext(obj)</strong></li>
+<li><p><strong>binding.context(obj)</strong></p>
+<p>  Set/get the context object of the sequence</p>
+<p>  Parameters:</p>
+<ul>
+<li><p><code>obj</code> <em>object</em> Optional, the context object for the functions</p>
+<p>Returns:</p>
+</li>
+<li><p><em>object</em> Current context object</p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setContext</span><span class="hljs-params">(obj)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (Arsenal.isObject(obj)) {
+            <span class="hljs-keyword">this</span>._context = obj;
+            <span class="hljs-keyword">this</span>._context.push = <span class="hljs-keyword">this</span>.pushFunction.bind(<span class="hljs-keyword">this</span>);
+            <span class="hljs-keyword">this</span>._context.pop = <span class="hljs-keyword">this</span>.popFunction.bind(<span class="hljs-keyword">this</span>);
+            <span class="hljs-keyword">this</span>._context.shift = <span class="hljs-keyword">this</span>.shiftFunction.bind(<span class="hljs-keyword">this</span>);
+            <span class="hljs-keyword">this</span>._context.unshift = <span class="hljs-keyword">this</span>.unshiftFunction.bind(<span class="hljs-keyword">this</span>);
+            <span class="hljs-keyword">this</span>._context.count = <span class="hljs-keyword">this</span>.countFunctions.bind(<span class="hljs-keyword">this</span>);
+            <span class="hljs-keyword">this</span>._context.next = <span class="hljs-keyword">this</span>.next.bind(<span class="hljs-keyword">this</span>);
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._context;
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>binding.next(func)</strong></p>
+<p>  Run to the next function</p>
+<p>  Can be used as a callback, which will pass directly to the next function</p>
+<p>  Parameters will forward to the next function</p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">next</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-keyword">var</span> index = ++<span class="hljs-keyword">this</span>._index;
+
+        <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-keyword">this</span>._functions.length) {
+            <span class="hljs-keyword">var</span> func = <span class="hljs-keyword">this</span>._functions[index];
+
+            <span class="hljs-keyword">return</span> func.apply(<span class="hljs-keyword">this</span>._context, <span class="hljs-built_in">arguments</span>);
+        }
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>binding.run(func)</strong></p>
+<p>  Start running the sequence</p>
+<p>  Parameters will forward to the next function</p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> {</span>
+
+        <span class="hljs-keyword">this</span>._index = -<span class="hljs-number">1</span>;
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.next.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p><strong>Primary functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Sequence.prototype.pushFunction = pushFunction;
+    Sequence.prototype.popFunction = popFunction;
+    Sequence.prototype.shiftFunction = shiftFunction;
+    Sequence.prototype.unshiftFunction = unshiftFunction;
+    Sequence.prototype.countFunctions = countFunctions;
+    Sequence.prototype.setContext = setContext;
+    Sequence.prototype.next = next;
+    Sequence.prototype.run = run;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p><strong>Accessibility functions</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Sequence.prototype.push = pushFunction;
+    Sequence.prototype.pop = popFunction;
+    Sequence.prototype.shift = shiftFunction;
+    Sequence.prototype.unshift = unshiftFunction;
+    Sequence.prototype.count = countFunctions;
+    Sequence.prototype.context = setContext;
+
+    <span class="hljs-comment">/* Export the Sequence mechanism */</span>
+    Arsenal.Sequence = Sequence;
+    <span class="hljs-keyword">return</span> Sequence;
+
+})(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

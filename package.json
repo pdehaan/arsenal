@@ -1,0 +1,38 @@
+{
+    "name": "arsenal",
+    "description": "A collection of various useful mechanisms for javascript applications",
+    "keywords": [
+        "arsenal", "mechanisms", "collection", "library",
+        "binding", "event", "functional", "grid", "hatch", "sequence", "throttle", "trigger"
+    ],
+    "version": "1.4.0",
+    "author": "DJ-NotYet <dj.notyet@gmail.com>",
+    "contributors" : [],
+    "license": {
+        "type": "Apache License 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "main": "arsenal.js",
+    "dependencies": {},
+    "devDependencies": {
+        "mocha": "*",
+        "expect.js": "*",
+        "jshint": "*",
+        "optimist": "*",
+        "uglify-js": "*",
+        "docco": "*"
+    },
+    "scripts": {
+        "build": "make build",
+        "test": "make test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/DJ-NotYet/arsenal.git"
+    },
+    "bugs": {
+        "url":"https://github.com/DJ-NotYet/arsenal/issues/new",
+        "email": "dj.notyet@gmail.com"
+    },
+    "homepage": ""
+}

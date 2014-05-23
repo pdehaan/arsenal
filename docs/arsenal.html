@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Arsenal</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="arsenal.html">
+                arsenal.js
+              </a>
+            
+              
+              <a class="source" href="binding.html">
+                binding.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="functional.html">
+                functional.js
+              </a>
+            
+              
+              <a class="source" href="grid.html">
+                grid.js
+              </a>
+            
+              
+              <a class="source" href="sequence.html">
+                sequence.js
+              </a>
+            
+              
+              <a class="source" href="throttle.html">
+                throttle.js
+              </a>
+            
+              
+              <a class="source" href="trigger.html">
+                trigger.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="arsenal">Arsenal</h1>
+<p><strong>Version 1.4.0</strong></p>
+<p>A collection of various useful mechanisms for javascript applications.</p>
+<h2 id="summary">Summary</h2>
+<ul>
+<li><p><strong>Binding</strong> A mechanism implements the Data Binding.</p>
+</li>
+<li><p><strong>Event</strong> The implementation of the well-known <em>Event</em> mechanism.</p>
+</li>
+<li><p><strong>Functional</strong> For improving the programming style of asynchronous, mainly in node.js, In a functional style.</p>
+</li>
+<li><p><strong>Grid</strong> Implementation of the two-dimensional grid flow algorithm.</p>
+</li>
+<li><p><strong>Hatch</strong> Proxy callbacks for asynchronous functions.</p>
+</li>
+<li><p><strong>Sequence</strong> Run functions and callbacks in sequence.</p>
+</li>
+<li><p><strong>Throttle</strong> Limit the specific procedure to be run in a certain frequency.</p>
+</li>
+<li><p><strong>Trigger</strong> Invokes a specified function when all the given conditions were satisfied.</p>
+</li>
+<li><p><strong>Pipeline</strong> (Deprecated) A functional pipeline mechanism, by utilizing the Event and Functional mechanisms.</p>
+</li>
+<li><p><strong>Impulse</strong> (Deprecated) A data-driven mechanism base on Binding and Trigger mechanisms.</p>
+</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<pre><code class="lang-bash">npm install arsenal
+</code></pre>
+<ul>
+<li>for nodejs:</li>
+</ul>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> Arsenal = <span class="hljs-built_in">require</span>(<span class="hljs-string">'arsenal'</span>);
+</code></pre>
+<ul>
+<li>for browsers:</li>
+</ul>
+<pre><code class="lang-javascript">&lt;script type=<span class="hljs-string">'text/javascript'</span> src=<span class="hljs-string">'arsenal.js'</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></span>
+</code></pre>
+<ul>
+<li>for browsers in production:</li>
+</ul>
+<pre><code class="lang-javascript">&lt;script type=<span class="hljs-string">'text/javascript'</span> src=<span class="hljs-string">'arsenal.min.js'</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></span>
+</code></pre>
+<h2 id="customization">Customization</h2>
+<p>Use the <code>build.js</code> script for your customization.</p>
+<pre><code>Usage: node build MECHANISM1 [MECHANISM2 ...] [OPTIONS]
+
+Options:
+  -m, --minify   Whether to minify the output file              [<span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>]
+  -o, --output   Set path to the output file
+                           [<span class="hljs-keyword">default</span>: <span class="hljs-string">'/source/lab/osp/arsenal/build/arsenal.js'</span>]
+  -q, --quiet    Do not print any messages.                     [<span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>]
+  -h, --help     Show <span class="hljs-keyword">this</span> help message and exit.
+  -V, --version  Print version number and exit.
+</code></pre><p>Build only with some mechanisms, just pass the mechanism names to the script:</p>
+<pre><code class="lang-bash">node build event functional
+</code></pre>
+<p>To build all mechanisms, just pass <code>all</code> as the mechanism name:</p>
+<pre><code class="lang-bash">node build all
+</code></pre>
+<p>By default, the result file is place in the <code>build/</code> directory, you can designate yours with <code>-o FILE</code> option:</p>
+<pre><code class="lang-bash">node build all -o /path/to/your/output/file.js
+</code></pre>
+<p>The build script ships with the minification via UglifyJS, to minify the result file, use <code>-m</code> option:</p>
+<pre><code class="lang-bash">node build all -m
+</code></pre>
+<h2 id="browser-compatibility">Browser Compatibility</h2>
+<p>For old browsers have no supports for javascript 1.8.5,
+e.g. IE series below IE9.
+use <code>iesucks</code> or other js1.8 shives:</p>
+<pre><code class="lang-javascript">&lt;script type=<span class="hljs-string">'text/javascript'</span> src=<span class="hljs-string">'iesucks.min.js'</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">'text/javascript'</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">'arsenal.min.js'</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></span>
+</code></pre>
+<p>Hint: Use <code>test/index.html</code> to check for the compatibility of your browser.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-comment">/******************************************************************************
+
+  Arsenal
+
+  https://github.com/DJ-NotYet/arsenal
+
+  Copyright (c) 2012-2014, DJ-NotYet &lt;dj.notyet@gmail.com&gt;
+
+  Licensed under the Apache License, Version 2.0 (the 'License');
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an 'AS IS' BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+ *****************************************************************************/</span>
+
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root)</span> {</span>
+
+    <span class="hljs-comment">/* Version tag */</span>
+    <span class="hljs-keyword">var</span> _VERSION_ = <span class="hljs-string">'1.4.0'</span>;
+
+    <span class="hljs-comment">/* Initialize context */</span>
+    <span class="hljs-keyword">var</span> Arsenal = {},
+        previousArsenal = root.Arsenal;
+
+    <span class="hljs-comment">/* Version info */</span>
+    Arsenal.version = _VERSION_;
+
+    <span class="hljs-comment">/* Whether running in node.js or browsers */</span>
+    Arsenal.inNode = (
+        <span class="hljs-keyword">typeof</span> process === <span class="hljs-string">'object'</span> &amp;&amp;
+        process.version &amp;&amp;
+        <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">require</span> === <span class="hljs-string">'object'</span> &amp;&amp;
+        <span class="hljs-keyword">typeof</span> module === <span class="hljs-string">'object'</span> &amp;&amp;
+        <span class="hljs-built_in">require</span>.main === module
+    );
+    <span class="hljs-comment">/* Compatibility */</span>
+    Arsenal.node = Arsenal.inNode;
+
+    <span class="hljs-comment">/* Export the Arsenal object for node.js and/or browsers */</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports !== <span class="hljs-string">'undefined'</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> module !== <span class="hljs-string">'undefined'</span> &amp;&amp; module.exports) {
+            exports = module.exports = Arsenal;
+
+        } <span class="hljs-keyword">else</span> {
+            exports.Arsenal = Arsenal;
+        }
+
+    } <span class="hljs-keyword">else</span> {
+        root.Arsenal = Arsenal;
+        Arsenal.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            root.Arsenal = previousArsenal;
+            <span class="hljs-keyword">return</span> Arsenal;
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="functions">Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    Arsenal.isBoolean = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'boolean'</span>;
+    };
+
+    Arsenal.isNumber = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'number'</span> &amp;&amp; <span class="hljs-built_in">isFinite</span>(value);
+    };
+
+    Arsenal.isString = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'string'</span>;
+    };
+
+    Arsenal.isArray = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'object'</span> &amp;&amp; value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>;
+    };
+
+    Arsenal.isDate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'object'</span> &amp;&amp; value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span>;
+    };
+
+    Arsenal.isRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'object'</span> &amp;&amp; value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">RegExp</span>;
+    };
+
+    Arsenal.isFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'function'</span>;
+    };
+
+    Arsenal.isHash = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> value &amp;&amp; <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'object'</span> &amp;&amp;
+            value.constructor === <span class="hljs-built_in">Object</span>.prototype.constructor;
+    };
+
+    Arsenal.isObject = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> value === <span class="hljs-built_in">Object</span>(value);
+    };
+
+    Arsenal.isNull = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> value === <span class="hljs-literal">null</span>;
+    };
+
+    Arsenal.isUndefined = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'undefined'</span>;
+    };
+
+    Arsenal.isDefined = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">'undefined'</span>;
+    };
+
+    Arsenal.isNumericString = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">return</span> (<span class="hljs-regexp">/^-?[0-9]+[0-9\.]*$/</span>.test(value));
+    };
+
+    Arsenal.getKeys = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object)</span> {</span>
+        <span class="hljs-keyword">var</span> keys = [], property;
+        <span class="hljs-keyword">for</span> (property <span class="hljs-keyword">in</span> object) {
+            keys.push(property);
+        }
+        <span class="hljs-keyword">return</span> keys;
+    };
+
+    Arsenal.getValues = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object)</span> {</span>
+        <span class="hljs-keyword">var</span> values = [], property;
+        <span class="hljs-keyword">for</span> (property <span class="hljs-keyword">in</span> object) {
+            values.push(object[property]);
+        }
+        <span class="hljs-keyword">return</span> values;
+    };
+
+    Arsenal.extend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(destination, source, recursive)</span> {</span>
+        <span class="hljs-keyword">if</span> (destination <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> &amp;&amp;
+            source <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>) {
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> index = <span class="hljs-number">0</span>; index &lt; source.length; index++) {
+                <span class="hljs-keyword">if</span> (recursive &amp;&amp;
+                    <span class="hljs-keyword">typeof</span> destination[index] === <span class="hljs-string">'object'</span> &amp;&amp;
+                    <span class="hljs-keyword">typeof</span> source[index] === <span class="hljs-string">'object'</span>) {
+                    Arsenal.extend(destination[index], source[index], recursive);
+                } <span class="hljs-keyword">else</span> {
+                    destination[index] = source[index];
+                }
+            }
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> property <span class="hljs-keyword">in</span> source) {
+                <span class="hljs-keyword">if</span> (recursive &amp;&amp;
+                    <span class="hljs-keyword">typeof</span> destination[property] === <span class="hljs-string">'object'</span> &amp;&amp;
+                    <span class="hljs-keyword">typeof</span> source[property] === <span class="hljs-string">'object'</span>) {
+                    Arsenal.extend(destination[property], source[property], recursive);
+                } <span class="hljs-keyword">else</span> {
+                    destination[property] = source[property];
+                }
+            }
+        }
+        <span class="hljs-keyword">return</span> destination;
+    };
+<span class="hljs-comment">/*
+    Arsenal.equals = function (a, b) {
+        if (Arsenal.isArray(a) &amp;&amp; Arsenal.isArray(b)) {
+            var result = true;
+            for (var i = 0; i &lt; a.length; i++) {
+                result = result &amp;&amp; Arsenal.equals(a[i], b[i]);
+                if (! result) { return result; }
+            }
+            return result;
+        } else if (Arsenal.isArray(a) || Arsenal.isArray(b)) {
+            return false;
+        } else if (Arsenal.isHash(a) &amp;&amp; Arsenal.isHash(b)) {
+            var result = true,
+                checked = [],
+                i, j;
+            for (i in a) {
+                result = result &amp;&amp; Arsenal.equals(a[i], b[i]);
+                if (! result) {
+                    return result;
+                }
+                checked.push(i);
+            }
+            for (j in b) {
+                result = result &amp;&amp; (checked.indexOf(j) !== -1);
+                if (! result) {
+                    return result;
+                }
+            }
+            return result;
+        } else if (a === b) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+*/</span>
+<span class="hljs-comment">/*
+    Arsenal.binarySearch = function (object, array, comparator) {
+        var first = 0;
+        var last = array.length - 1;
+        while (first &lt;= last) {
+            var mid = (first + last) &gt;&gt; 1;
+            var c = comparator(object, array[mid]);
+            if (typeof c !== 'number') {
+                return c;
+            } else if (c &gt; 0) {
+                first = mid + 1;
+            } else if (c &lt; 0) {
+                last = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Return the nearest lesser index, ‘-1’ means ‘0’, ‘-2’ means ‘1’, etc.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        return -(first + 1);
+    };
+*/
+    Arsenal.async = (Arsenal.inNode ?
+        process.nextTick :
+        function (func) {
+            setTimeout(func, 0);
+        }
+    );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2 id="mechanisms">Mechanisms</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+
+<span class="hljs-comment">/*{CONTENT}*/</span>
+
+    }).call(Arsenal);
+
+
+}).call({}, <span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

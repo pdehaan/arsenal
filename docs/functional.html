@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>functional.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="arsenal.html">
+                arsenal.js
+              </a>
+            
+              
+              <a class="source" href="binding.html">
+                binding.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="functional.html">
+                functional.js
+              </a>
+            
+              
+              <a class="source" href="grid.html">
+                grid.js
+              </a>
+            
+              
+              <a class="source" href="sequence.html">
+                sequence.js
+              </a>
+            
+              
+              <a class="source" href="throttle.html">
+                throttle.js
+              </a>
+            
+              
+              <a class="source" href="trigger.html">
+                trigger.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>functional.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h3 id="functional-mechanism">Functional Mechanism</h3>
+<p>Stablity: <strong>STABLE</strong></p>
+<p>The Functional mechanism is used for improving the programming style of asynchronous, mainly in node.js.</p>
+<p>Inspired by the functional programming, the Functional mechanism has the following features:</p>
+<ul>
+<li><p>Whenever a callable value is returned, it will be invoked and return</p>
+</li>
+<li><p>All registered functions will be invoked in a consistent context (the <code>this</code> context)</p>
+</li>
+<li><p>Function returns with <code>F(&#39;name&#39;)</code> will return a callable value, with current context attached</p>
+</li>
+<li><p>If the callback function is set, it will be invoked whenever a function returns a non-callable value (except undefined)</p>
+</li>
+</ul>
+<p>The Functional mechanism has only one interface:</p>
+<p><code>F(name, args, context, callback)</code></p>
+<p>Registers a function by:</p>
+<p><code>F(&#39;name&#39;, function () { ... });</code></p>
+<p>Get/return a function with consistent context:</p>
+<ul>
+<li><p><code>F(&#39;name&#39;);</code>
+(name can be any context in string)</p>
+</li>
+<li><p><code>F(&#39;name&#39;, [ arg1, arg2 ]);</code>
+(args must be an array)</p>
+</li>
+<li><p><code>F(&#39;name&#39;, null, { contextVar: &#39;value&#39; });</code>
+(function context will be replaced totally)</p>
+</li>
+<li><p><code>F(&#39;name&#39;, null, function (retval) { /* callback */ });</code>
+(the context of the callback function is individual)</p>
+</li>
+</ul>
+<p>The return value above can also be called directly:</p>
+<p><code>F(&#39;name&#39;)(arg1, arg2);</code></p>
+<p>or:</p>
+<p><code>F(&#39;name&#39;, null, callback)(arg1, arg2);</code></p>
+<p><strong>NOTICE: The content of the name cannot be pure numbers.</strong>
+(This issure is difficult to fix, maybe a future version would make it)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Arsenal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <ul>
+<li><p><strong>Constructor</strong></p>
+<p>  <code>var F = new Arsenal.Functional(hook)</code></p>
+<p>  About hook:</p>
+<p>  A hook function accepts three parameters,
+  and MUST always returns the third param <em>result</em>, e.g.</p>
+<pre><code>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(err, snapshot, result)</span> {</span> <span class="hljs-keyword">return</span> result; }
+</code></pre><p>  The hook function will be called when the named function
+  is found and executed or not been found (then err is not null)</p>
+<p>  The argument <em>snapshot</em> contains the following elements:</p>
+<pre><code>      snapshot = {
+          name: <span class="hljs-string">''</span>,  <span class="hljs-comment">// String, name of the function to be called</span>
+          args: [],  <span class="hljs-comment">// Array, arguments ready to pass to the function</span>
+          context: {},  <span class="hljs-comment">// Object, the invoke context of the function</span>
+          callback: R,  <span class="hljs-comment">// Function, the callback after current execution</span>
+          presented: <span class="hljs-literal">false</span>,  <span class="hljs-comment">// Boolean, whether the required function exists</span>
+          nested: <span class="hljs-literal">false</span>  <span class="hljs-comment">// Boolean, whether the R function is created as</span>
+                          <span class="hljs-comment">// the return value of current function</span>
+      }
+</code></pre></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Functional</span><span class="hljs-params">(hook)</span> {</span>
+
+        <span class="hljs-comment">/* Closure variables */</span>
+        <span class="hljs-keyword">var</span> _functions = {},  <span class="hljs-comment">/* function list */</span>
+            _instance = <span class="hljs-literal">null</span>,  <span class="hljs-comment">/* the most recent created R instance */</span>
+            _creation = <span class="hljs-literal">null</span>,  <span class="hljs-comment">/* the last created snapshot */</span>
+            _snapshot = {  <span class="hljs-comment">/* snapshot content */</span>
+                name: <span class="hljs-string">''</span>,
+                args: [],
+                context: {},
+                callback: <span class="hljs-literal">null</span>,
+                presented: <span class="hljs-literal">false</span>,
+                nested: <span class="hljs-literal">false</span>
+            };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Patterns:</p>
+<ul>
+<li><p>new F({…});</p>
+</li>
+<li><p>F(‘name’, function (…) { … });</p>
+</li>
+<li><p>F(‘name’);</p>
+</li>
+<li><p>F(‘name’, [ arg1, arg2, … ]);</p>
+</li>
+<li><p>F(‘name’, [ arg1, arg2, … ], { … });</p>
+</li>
+<li><p>F(‘name’, [ arg1, arg2, … ], { … }, function (result) { … });</p>
+</li>
+<li><p>F(‘name’, [ arg1, arg2, … ], function (result) { … });</p>
+</li>
+<li><p>F();</p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">F</span><span class="hljs-params">(name, args, context, callback)</span> {</span>
+
+            <span class="hljs-keyword">if</span> (Arsenal.isString(name)) {
+                <span class="hljs-comment">/* F('name', function (...) { ... }); */</span>
+                <span class="hljs-keyword">if</span> (Arsenal.isFunction(args)) {
+                    _functions[name] = args;
+
+                <span class="hljs-comment">/* F('name'); */</span>
+                <span class="hljs-comment">/* F('name', [ arg1, arg2, ... ]); */</span>
+                <span class="hljs-comment">/* F('name', [ arg1, arg2, ... ], { ... }); */</span>
+                <span class="hljs-comment">/* F('name', [ arg1, arg2, ... ], { ... }, function (result) { ... }); */</span>
+                <span class="hljs-comment">/* F('name', [ arg1, arg2, ... ], function (result) { ... }); */</span>
+                } <span class="hljs-keyword">else</span> {
+                    _creation = {
+                        name: name,
+                        args: (Arsenal.isArray(args) ? args : []),
+                        context: (Arsenal.isHash(context) ? context : _snapshot.context),
+                        callback: (Arsenal.isFunction(callback) ? callback
+                            : (Arsenal.isFunction(context) ? context : <span class="hljs-literal">null</span>)
+                        ),
+                        presented: Arsenal.isFunction(_functions[name]),
+                        nested: <span class="hljs-literal">false</span>
+                    };
+
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> R(_creation);
+                }
+
+            <span class="hljs-comment">/* F(); */</span>
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> _functions;
+            }
+
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Patterns:</p>
+<ul>
+<li><p><code>new R(creation);</code></p>
+</li>
+<li><p><code>R(arg1, arg2, ...);</code></p>
+</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">R</span><span class="hljs-params">()</span> {</span>
+
+            <span class="hljs-comment">/* new R(creation); */</span>
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> R) {
+                _instance = R.bind(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);
+
+                <span class="hljs-keyword">return</span> _instance;
+
+            <span class="hljs-comment">/* R(arg1, arg2, ...); */</span>
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">var</span> result;
+
+                _snapshot.name = <span class="hljs-keyword">this</span>.name;
+                _snapshot.args = <span class="hljs-keyword">this</span>.args;
+                _snapshot.context = <span class="hljs-keyword">this</span>.context;
+                _snapshot.callback = <span class="hljs-keyword">this</span>.callback;
+                _snapshot.presented = <span class="hljs-keyword">this</span>.presented;
+                _snapshot.nested = <span class="hljs-keyword">this</span>.nested;
+
+                <span class="hljs-comment">/* Prefer preset arguments than the later */</span>
+                <span class="hljs-keyword">if</span> (_snapshot.args.length === <span class="hljs-number">0</span>) {
+                    _snapshot.args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);
+                }
+
+                <span class="hljs-comment">/* Execute wrapped function */</span>
+                <span class="hljs-keyword">if</span> (Arsenal.isFunction(_functions[_snapshot.name])) {
+                    result = _functions[_snapshot.name].apply(_snapshot.context, _snapshot.args);
+
+                <span class="hljs-comment">/* Forward to the hook if available */</span>
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isFunction(hook)) {
+                    <span class="hljs-keyword">return</span> hook(<span class="hljs-keyword">new</span> <span class="hljs-built_in">ReferenceError</span>(<span class="hljs-string">'No such function: '</span> + _snapshot.name), _snapshot);
+
+                <span class="hljs-comment">/* Throw exception */</span>
+                } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'No such function: '</span> + _snapshot.name);
+                }
+
+                <span class="hljs-comment">/* Continue nested execution */</span>
+                <span class="hljs-keyword">if</span> (result === _instance) {
+                    _creation.nested = <span class="hljs-literal">true</span>;
+
+                    <span class="hljs-comment">/* Attach last callback for invocation consistance */</span>
+                    <span class="hljs-keyword">if</span> (! Arsenal.isFunction(_creation.callback) &amp;&amp;
+                        Arsenal.isFunction(_snapshot.callback)) {
+
+                        _creation.callback = _snapshot.callback;
+                    }
+
+                    result = <span class="hljs-keyword">new</span> R(_creation);
+                }
+
+                <span class="hljs-comment">/* Invoke the callable result */</span>
+                <span class="hljs-keyword">if</span> (Arsenal.isFunction(result)) {
+                    <span class="hljs-comment">/* Non-sequential invocation only supports in node.js */</span>
+                    <span class="hljs-keyword">if</span> (Arsenal.inNode) {
+                        Arsenal.async(result);
+
+                    } <span class="hljs-keyword">else</span> {
+                        <span class="hljs-keyword">return</span> result();
+                    }
+
+                <span class="hljs-comment">/* Check for the ending */</span>
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Arsenal.isDefined(result)) {
+                    <span class="hljs-comment">/* Invoke callback function if available */</span>
+                    <span class="hljs-keyword">if</span> (Arsenal.isFunction(_snapshot.callback)) {
+                        _snapshot.callback(result);
+                    }
+
+                    <span class="hljs-comment">/* Pass to the hook if provided */</span>
+                    <span class="hljs-keyword">if</span> (Arsenal.isFunction(hook)) {
+                        hook(<span class="hljs-literal">null</span>, _snapshot, result);
+                    }
+
+                    <span class="hljs-keyword">return</span> result;
+                }
+            }
+
+        }
+
+        <span class="hljs-keyword">return</span> F.bind({});
+
+    }
+
+    <span class="hljs-comment">/* Export the Functional mechanism */</span>
+    Arsenal.Functional = Functional;
+    <span class="hljs-keyword">return</span> Functional;
+
+})(<span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
