@@ -8,10 +8,7 @@
     "version": "1.4.0",
     "author": "DJ-NotYet <dj.notyet@gmail.com>",
     "contributors" : [],
-    "license": {
-        "type": "Apache License 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    },
+    "license": "Apache-2.0",
     "main": "arsenal.js",
     "dependencies": {},
     "devDependencies": {
@@ -34,5 +31,5 @@
         "url": "https://github.com/DJ-NotYet/arsenal/issues/new",
         "email": "dj.notyet@gmail.com"
     },
-    "homepage": ""
+    "homepage": "https://github.com/DJ-NotYet/arsenal/"
 }
